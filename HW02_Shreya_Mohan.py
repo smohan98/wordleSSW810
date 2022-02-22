@@ -3,16 +3,17 @@ import HW03_Shreya_Mohan_dictionary as dictionary
 
 
 def letter_checker(stmt,wordle,word):
+    count = 0
     for i,ch in enumerate(wordle):
         if ch in word and ch not in wordle[:i]:
             if word[i] == ch:
                 stmt += f"{ch}"
+                count+=1
             else:
                 stmt += f"{ch}`"
         else:
             stmt += f'{ch}"'    
-    return stmt
-
+    return stmt,count
 
 def wordle_checker(win,guess):
     print('''WORDLE rules:
@@ -22,7 +23,7 @@ def wordle_checker(win,guess):
     > A correct letter in the wrong place turns yellow
     > An incorrect letter turns gray
     ''')
-
+    
     prev=[]
     attempts=6
     word = dictionary.word_picker()
@@ -44,7 +45,7 @@ def wordle_checker(win,guess):
             prev.append(wordle)     
             stmt=""
             #string comparison and checking the position of each character
-            stmt = letter_checker(stmt,wordle,word)
+            stmt,count = letter_checker(stmt,wordle,word)
             print(stmt)
         else:                       
             print(wordle)
