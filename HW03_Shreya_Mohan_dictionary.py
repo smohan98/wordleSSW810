@@ -1,7 +1,9 @@
 import random
+import os
 
 def file_reader():
-    f = open("words.txt", "r")
+    path = os.getcwd()+"/words.txt"
+    f = open(path, "r")
     data = f.read().splitlines()
     words = []
     for word in data:
