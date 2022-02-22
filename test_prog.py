@@ -5,6 +5,7 @@ import HW03_Shreya_Mohan_dictionary as dictionary
 import HW03_Shreya_Mohan_ui as ui
 from unittest.mock import patch
 
+"""Unit tests for wordle"""
 class TestWordle(unittest.TestCase):
     
     def test_fileReader(self):

@@ -16,3 +16,4 @@ def word_picker():
     words = file_reader()
     wordle = random.choice(words)
     return wordle.upper()
+
