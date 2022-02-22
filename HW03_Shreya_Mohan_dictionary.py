@@ -9,6 +9,7 @@ def file_reader():
     for word in data:
         if len(word) == 5:
             words.append(word)
+    f.close()
     return words
 
 def word_picker():  
