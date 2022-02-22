@@ -17,3 +17,5 @@ def user(attempts, prev , all_words):
     #to check if the input is of length 5 and is consisting of only alphabets
     if len(wordle)==5 and wordle not in prev and wordle.isalpha():
        return True,wordle.upper()
+
+       
