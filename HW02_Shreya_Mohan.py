@@ -14,7 +14,7 @@ def letter_checker(stmt,wordle,word):
     return stmt
 
 
-def wordle_checker():
+def wordle_checker(win,guess):
     print('''WORDLE rules:
     > Enter a 5 letter word
     > You have to guess the Wordle in maximum tries
@@ -34,8 +34,10 @@ def wordle_checker():
         check,wordle = ui.user(attempts,prev,all_words)
 
         if check and word == wordle:
+            win+=1
+            guess[6-attempts] += 1
             print("Correct Word")
-            return
+            return win,guess
         elif check and word != wordle:
             #reduces the count after every valid attempt
             attempts-=1             
@@ -48,7 +50,20 @@ def wordle_checker():
             print(wordle)
     
     print("Oops, you are out of chances. Better luck next time!")
+    return win,guess
+
+def main():
+    games_played=0
+    win = 0
+    guess = [0]*6
+    while True:
+        games_played += 1
+        win,guess=wordle_checker(win,guess)
+        print(f"GAMES PLAYED : {str(games_played)}")
+        print(f"WIN PERCENTAGE : {str((win*100)/games_played)}%")
+        for i in range(len(guess)):
+            print(f"{guess[i]} GAMES WON AT GUESS NUMBER {i+1}")
 
 if __name__ == "__main__":
-    while True:
-        wordle_checker()
+    main()
+
