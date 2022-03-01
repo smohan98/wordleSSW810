@@ -1,6 +1,8 @@
 import random
 import os
 
+from HW06_Shreya_Mohan_utility import file_transfer
+
 def file_reader():
     path = os.getcwd()+"/words.txt"
     f = open(path, "r")
@@ -12,8 +14,11 @@ def file_reader():
     f.close()
     return words
 
-def word_picker():  
-    words = file_reader()
+def word_picker(used_words):  
+    words = file_transfer()
     wordle = random.choice(words)
+    while wordle.upper() in used_words:
+        wordle = random.choice(words)
+    print(wordle)
     return wordle.upper()
 
