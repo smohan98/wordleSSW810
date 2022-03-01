@@ -15,10 +15,12 @@ def file_reader():
     return words
 
 def word_picker(used_words):  
-    words = file_transfer()
-    wordle = random.choice(words)
-    while wordle.upper() in used_words:
+    try:
+        words = file_transfer()
         wordle = random.choice(words)
-    print(wordle)
-    return wordle.upper()
+        while wordle.upper() in used_words:
+            wordle = random.choice(words)
+        return wordle.upper()
+    except Exception as e:
+        print(f"Error: {e}")
 

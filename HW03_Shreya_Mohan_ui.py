@@ -2,7 +2,10 @@ from HW06_Shreya_Mohan_utility import write_logs
 
 
 def user(attempts, prev , all_words):
-    wordle = input(f"Attempt #{7-attempts}\nEnter a 5 letter word \n")
+    try:
+        wordle = input(f"Attempt #{7-attempts}\nEnter a 5 letter word \n")
+    except Exception as e:
+        write_logs(f"ERROR : INPUT ERROR {e}",True) 
     write_logs(f'USER ENTERED: "{wordle.upper()}"')
     if not wordle:
         print("Thank you for playing, exiting game now")
