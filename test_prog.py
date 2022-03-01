@@ -3,6 +3,7 @@ import unittest
 import HW02_Shreya_Mohan as program
 import HW03_Shreya_Mohan_dictionary as dictionary
 import HW03_Shreya_Mohan_ui as ui
+import HW06_Shreya_Mohan_utility as ut
 from unittest.mock import patch
 
 """Unit tests for wordle"""
@@ -11,9 +12,6 @@ class TestWordle(unittest.TestCase):
     def test_fileReader(self):
         self.assertGreater(len(dictionary.file_reader()),0)
         
-    def test_wordPicker(self):
-        self.assertIsNotNone(dictionary.word_picker())
-    
     def test_letterChecker(self):
         st,count =program.letter_checker('','HAPPY','HAPPY')
         self.assertTrue(count,5)
@@ -53,6 +51,28 @@ class TestWordle(unittest.TestCase):
         words_list=dictionary.file_reader()
         self.assertEqual(ui.user(1,["SMALL","HAPPY","WATER"],words_list),(False,'Please enter a valid 5 letter word consisting of only alphabets.'))
 
+
+
+    @patch('builtins.input', side_effect = [''])
+    def test_user6(self, mock_inputs) -> None :
+        self.assertIsNotNone(dictionary.word_picker([]))
+
+    
+
+    @patch('builtins.input', side_effect = [''])
+    def test_user7(self, mock_inputs) -> None :
+        self.assertIsNotNone(dictionary.word_picker(["MONEY"]))
+
+
+    
+    @patch('builtins.input', side_effect = ['Month'])
+    def test_user8(self, mock_inputs) -> None :
+        self.assertIsNotNone(dictionary.word_picker([]))
+
+
+
+    def test_fileTransfer(self):
+        self.assertGreater(len(ut.file_transfer()),0)
 
 if __name__ == '__main__':
     unittest.main()
