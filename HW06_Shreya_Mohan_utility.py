@@ -20,6 +20,8 @@ def file_transfer():
     return words
 
 def write_logs(message,log_type_error=False):
+    if not os.path.exists("gameplay.log"):
+        file = open('gameplay.log','a+')
     logging.basicConfig(filename="gameplay.log",format="%(asctime)s %(message)s", filemode='w')
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
