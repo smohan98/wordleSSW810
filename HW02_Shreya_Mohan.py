@@ -1,6 +1,7 @@
 import HW03_Shreya_Mohan_ui as ui
 import HW03_Shreya_Mohan_dictionary as dictionary
 from HW06_Shreya_Mohan_utility import write_logs
+from HW07_Shreya_Mohan_statistics import file_statistics,word_ranking
 
 
 def letter_checker(stmt,wordle,word):
@@ -64,12 +65,15 @@ def wordle_checker(win,guess,used_words):
         return win,guess,used_words
     except Exception as e:
         print(f"Error: {e}")
+        
 def main():
     try:
         games_played=0
         win = 0
         guess = [0]*6
         used_words = []
+        file_statistics()
+        word_ranking()
         while True:
             games_played += 1
             win,guess,used_words=wordle_checker(win,guess,used_words)
@@ -81,7 +85,7 @@ def main():
                 print(f"{guess[i]} GAMES WON AT GUESS NUMBER {i+1}")
                 write_logs(f"{guess[i]} GAMES WON AT GUESS NUMBER {i+1}")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"There has been an error: {e}")
 
 if __name__ == "__main__":
     main()
