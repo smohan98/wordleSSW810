@@ -4,7 +4,10 @@ import HW02_Shreya_Mohan as program
 import HW03_Shreya_Mohan_dictionary as dictionary
 import HW03_Shreya_Mohan_ui as ui
 import HW06_Shreya_Mohan_utility as ut
+import HW07_Shreya_Mohan_statistics as stats
 from unittest.mock import patch
+import pathlib as pl
+
 
 """Unit tests for wordle"""
 class TestWordle(unittest.TestCase):
@@ -70,9 +73,26 @@ class TestWordle(unittest.TestCase):
         self.assertIsNotNone(dictionary.word_picker([]))
 
 
-
+    
     def test_fileTransfer(self):
         self.assertGreater(len(ut.file_transfer()),0)
+
+
+
+    def test_fileStatistics(self):
+        if not pl.Path("letterFrequency.csv").resolve().is_file():
+            raise AssertionError("File does not exist: %s" % str("letterFrequency.csv"))
+
+
+
+    def test_CSVtoDict(self):
+        self.assertTrue(stats.csv_to_dict)
+
+    
+    def test_wordRanking(self):
+        if not pl.Path("wordRank.csv").resolve().is_file():
+            raise AssertionError("File does not exist: %s" % str("wordRank.csv"))
+
 
 if __name__ == '__main__':
     unittest.main()
