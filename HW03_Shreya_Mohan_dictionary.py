@@ -1,26 +1,38 @@
 import random
 import os
 
-from HW06_Shreya_Mohan_utility import file_transfer
+# from HW06_Shreya_Mohan_utility import Utility, file_transfer
+import HW06_Shreya_Mohan_utility as util
 
-def file_reader():
-    path = os.getcwd()+"/words.txt"
-    f = open(path, "r")
-    data = f.read().splitlines()
-    words = []
-    for word in data:
-        if len(word) == 5:
-            words.append(word)
-    f.close()
-    return words
+class Dictionary:
 
-def word_picker(used_words):  
-    try:
-        words = file_transfer()
-        wordle = random.choice(words)
-        while wordle.upper() in used_words:
+    def __init__(self):
+        self.words = []
+        self.utils = util.Utility()
+
+    def __str__(self):
+        return f'Dictionary: ({self.words}, {self.utils})'
+
+    def file_reader(self):
+        self.words.clear()
+        path = os.getcwd()+"/words.txt"
+        f = open(path, "r")
+        data = f.read().splitlines()
+        # words = []
+        for word in data:
+            if len(word) == 5:
+                self.words.append(word)
+        f.close()
+        return self.words
+
+    def word_picker(self,used_words):  
+        try:
+            words = self.utils.file_transfer()
             wordle = random.choice(words)
-        return wordle.upper()
-    except Exception as e:
-        print(f"Error: {e}")
+            while wordle.upper() in used_words:
+                wordle = random.choice(words)
+            return wordle.upper()
+        except Exception as e:
+            print(f"Error: {e}")
+
 
