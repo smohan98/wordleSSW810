@@ -15,69 +15,86 @@ import pathlib as pl
 class TestWordle(unittest.TestCase):
     
     def test_fileReader(self):
-        self.assertGreater(len(dictionary.file_reader()),0)
+        d = dictionary.Dictionary()
+        self.assertGreater(len(d.file_reader()),0)
         
     def test_letterChecker(self):
-        st,count =program.letter_checker('','HAPPY','HAPPY')
+        prog = program.Game()
+        st,count =prog.letter_checker('','HAPPY','HAPPY')
         self.assertTrue(count,5)
 
     def test_letterCheckerFalse(self):
-        st,count =program.letter_checker('','ARISE','HAPPY')
+        prog = program.Game()
+        st,count =prog.letter_checker('','ARISE','HAPPY')
         self.assertFalse(count,5)
 
     @patch('builtins.input', side_effect = ['hello'])
     def test_user(self, mock_inputs) -> None :
-        words_list=dictionary.file_reader()
-        self.assertEqual(ui.user(1,["SMALL","HAPPY","WATER"],words_list),(True,'HELLO'))
+        d = dictionary.Dictionary()
+        words_list=d.file_reader()
+        u = ui.Info()
+        self.assertEqual(u.user(1,["SMALL","HAPPY","WATER"],words_list),(True,'HELLO'))
 
     
     @patch('builtins.input', side_effect = ['happy'])
     def test_user2(self, mock_inputs) -> None :
-        words_list=dictionary.file_reader()
-        self.assertEqual(ui.user(1,["SMALL","HAPPY","WATER"],words_list),(False,'You have already entered this word.'))
+        d = dictionary.Dictionary()
+        words_list=d.file_reader()
+        u = ui.Info()
+        self.assertEqual(u.user(1,["SMALL","HAPPY","WATER"],words_list),(False,'You have already entered this word.'))
 
     
     @patch('builtins.input', side_effect = ['happ'])
     def test_user3(self, mock_inputs) -> None :
-        words_list=dictionary.file_reader()
-        self.assertEqual(ui.user(1,["SMALL","HAPPY","WATER"],words_list),(False,'Please enter a valid 5 letter word consisting of only alphabets.'))
+        d = dictionary.Dictionary()
+        words_list=d.file_reader()
+        u = ui.Info()
+        self.assertEqual(u.user(1,["SMALL","HAPPY","WATER"],words_list),(False,'Please enter a valid 5 letter word consisting of only alphabets.'))
 
 
    
     @patch('builtins.input', side_effect = ['asdfg'])
     def test_user4(self, mock_inputs) -> None :
-        words_list=dictionary.file_reader()
-        self.assertEqual(ui.user(1,["SMALL","HAPPY","WATER"],words_list),(False,'Word is not in dictionary'))
+        d = dictionary.Dictionary()
+        words_list=d.file_reader()
+        u = ui.Info()
+        self.assertEqual(u.user(1,["SMALL","HAPPY","WATER"],words_list),(False,'Word is not in dictionary'))
 
 
     
     @patch('builtins.input', side_effect = ['h23p@'])
     def test_user5(self, mock_inputs) -> None :
-        words_list=dictionary.file_reader()
-        self.assertEqual(ui.user(1,["SMALL","HAPPY","WATER"],words_list),(False,'Please enter a valid 5 letter word consisting of only alphabets.'))
+        d = dictionary.Dictionary()
+        words_list=d.file_reader()
+        u = ui.Info()
+        self.assertEqual(u.user(1,["SMALL","HAPPY","WATER"],words_list),(False,'Please enter a valid 5 letter word consisting of only alphabets.'))
 
 
 
     @patch('builtins.input', side_effect = [''])
     def test_user6(self, mock_inputs) -> None :
-        self.assertIsNotNone(dictionary.word_picker([]))
+        d = dictionary.Dictionary()
+        self.assertIsNotNone(d.word_picker([]))
 
     
 
     @patch('builtins.input', side_effect = [''])
     def test_user7(self, mock_inputs) -> None :
-        self.assertIsNotNone(dictionary.word_picker(["MONEY"]))
+        d = dictionary.Dictionary()
+        self.assertIsNotNone(d.word_picker(["MONEY"]))
 
 
     
     @patch('builtins.input', side_effect = ['Month'])
     def test_user8(self, mock_inputs) -> None :
-        self.assertIsNotNone(dictionary.word_picker([]))
+        d = dictionary.Dictionary()
+        self.assertIsNotNone(d.word_picker([]))
 
 
     
     def test_fileTransfer(self):
-        self.assertGreater(len(ut.file_transfer()),0)
+        utils = ut.Utility()
+        self.assertGreater(len(utils.file_transfer()),0)
 
 
 
@@ -88,7 +105,8 @@ class TestWordle(unittest.TestCase):
 
 
     def test_CSVtoDict(self):
-        self.assertTrue(stats.csv_to_dict)
+        stat = stats.Statistics()
+        self.assertTrue(stat.csv_to_dict)
 
     
     def test_wordRanking(self):
