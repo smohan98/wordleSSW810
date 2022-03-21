@@ -10,6 +10,8 @@ import pathlib as pl
 
 
 """Unit tests for wordle"""
+"""Unit tests using TestWordle class"""
+
 class TestWordle(unittest.TestCase):
     
     def test_fileReader(self):
