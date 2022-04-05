@@ -37,69 +37,67 @@ class Helper:
         wordle_set = set(wordle)
         word_set = set(word)
         good = list(word_set & wordle_set)
-        bad = list(word_set - wordle_set)
+        bad = list(wordle_set - word_set)
 
         for i in range(len(stmt)):
-            if  stmt[i] == '`' or stmt[i] == '"' or (i+1<len(stmt) and (stmt[i+1] == '`' or stmt[i+1] == '"')):
-                correct += ' '
+            if  stmt[i] == '`' or stmt[i] == '"':
+                continue
+            elif i+1<len(stmt) and (stmt[i+1] == '`' or stmt[i+1] == '"'):
+                correct += '_'
             else:
-                correct += stmt[i] 
-
-        print(good)
-        print(bad)
-        print(correct)
+                correct += stmt[i]
         return good , bad , correct
 
-    def possible_words(self,good, bad, correct)->list:
-        good = input("Enter good letters:")
-        if len(good) > 5:
-            while len(good)>5:
-                good = input("Enter good letters:")
-        bad = input("Enter bad letters:")
+    def possible_words(self,good, bad, correct,prev)->list:
+        # good = input("Enter good letters:")
+        # if len(good) > 5:
+        #     while len(good)>5:
+        #         good = input("Enter good letters:")
+        # bad = input("Enter bad letters:")
         for letter in bad:
             if letter in good:
                 bad = list(filter(lambda i : i not in good, bad))
-        print("The bad letters considered are:")
-        print('"'+''.join(bad)+'"')
+        # print("The bad letters considered are:")
+        # print('"'+''.join(bad)+'"')
         # print(result)  
-        correct = input("Enter letters at correct position(optional). Press enter to skip this step.")
-        if len(correct)>0:
-            while len(correct) > 5:
-                print("Please enter exactly 5 items including spaces.")
+        # correct = input("Enter letters at correct position(optional). Press enter to skip this step.")
 
-
+        self.file_wordRank()
         if (good == None or len(good)==0) and (bad == None or len(bad)==0) and (correct == None or len(correct) == 0):
-            print(self.words[:50])
+            return self.words[:50]
         else:
-            output = start = Node()
+            output = []
             for word in self.words:
+                if word in prev:
+                    continue
                 if any(item in word for item in bad):
                     continue
-                if any(item not in word for item in good):
+                if not all(elem in word  for elem in good):
                     continue
-                if correct != None and len(correct)==5:
-                    f = True 
-                    for idx, letter in enumerate(correct):
-                        if letter == ' ':
-                            continue
-                        if word[idx] != letter:
-                            f = False
-                            break
-                    if f:
-                        start.next_value = Node(word)
-                        start = start.next_value
-                else:
-                    start.next_value = Node(word)
-                    start = start.next_value
-            output=output.next_value
-            total=1
-            while output:
-                print(output.data)
-                output = output.next_value
-                total+=1
-            print(total-1)
-            return output.data
+                # if len(correct)==5:
+                f = True
+                for idx, letter in enumerate(correct):
+                    if letter == '_':
+                        continue
+                    if word[idx] != letter:
+                        f = False
+                        break
+                if f:
+                        output.append(word)
+                        # start.next_value = Node(word)
+                        # start = start.next_value
+                # else:
+                    # start.next_value = Node(word)
+                    # start = start.next_value
+                    # print(word)
+                    # output.append(word)
+            # output=output.next_value
+            # total=1
+            # print(output.data)
+            # while output:
+            #     output = output.next_value
+            #     total+=1
+            return output
             
 
 f = Helper()
-f.file_wordRank()

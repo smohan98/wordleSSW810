@@ -12,6 +12,7 @@ class Game:
         self.words = []
         self.d = dictionary.Dictionary()
         self.utils = util.Utility()
+        self.helper = helper.Helper()
         self.stats = stat.Statistics()
         self.u = ui.Info()
 
@@ -30,12 +31,12 @@ class Game:
                     else:
                         stmt += f"{ch}`"
                 else:
-                    stmt += f'{ch}"'    
+                    stmt += f'{ch}"'
             return stmt,count
         except Exception as e:
             print(f"Error: {e}")
 
-    def wordle_checker(self,win,guess,used_words,wordle,word):
+    def wordle_checker(self,win,guess,used_words):
         try:
             print('''WORDLE rules:
             > Enter a 5 letter word
@@ -44,45 +45,54 @@ class Game:
             > A correct letter in the wrong place turns yellow
             > An incorrect letter turns gray
             ''')
-            
+            good,bad,correct = [],[],''
             prev=[]
             attempts=6
 
-            self.utils.write_logs(f"RANDOM WORD CHOSEN FOR THE GAME: {word}")
-            used_words.append(word)
             # all_words = self.d.file_reader()
 
+            all_words = self.helper.possible_words(good, bad, correct , prev)
+            wordle = all_words[0].lower()
+            prev.append(wordle.lower())
+            word = self.d.word_picker(used_words).lower()
+            self.utils.write_logs(f"RANDOM WORD CHOSEN FOR THE GAME: {word}")
+            used_words.append(word)
 
             #While loop that works till 6 attempts are made
             while attempts:
                 # check,wordle = self.u.user(attempts,prev,all_words)
 
-                check = True
-
-                if check and word.strip() == wordle.strip():
+                all_words = self.helper.possible_words(good, bad, correct , prev)
+                wordle = all_words[0].lower()
+                prev.append(wordle.lower())
+                self.utils.write_logs(f'AUTO ENTERED: "{wordle.upper()}"')
+                print(f"Attempt #{7-attempts}\n Entered Word : {wordle.upper()}\n")
+                # print(wordle) 
+                if word.strip() == wordle.strip():
                     win+=1
                     guess[6-attempts] += 1
                     self.utils.write_logs(f"USER ENTERED THE CORRECT WORD: {wordle.upper()}")
                     print("Correct Word")
-                    return win,guess,used_words , wordle
-                elif check and word != wordle:
+                    return win,guess,used_words
+                elif word != wordle:
                     #reduces the count after every valid attempt
                     attempts-=1             
-                    prev.append(wordle)     
+                    # prev.append(wordle)     
                     stmt=""
                     #string comparison and checking the position of each character
                     stmt,count = self.letter_checker(stmt,wordle,word)
-                    print(stmt)
+                    good , bad , correct = self.helper.good_bad_correct_generate(wordle , word  ,stmt)
                 else:                       
                     print(wordle)
             
             print("Oops, you are out of chances. Better luck next time!")
+            print(f"THE CORRECT WORD WAS: {word.upper()}")
             self.utils.write_logs(f"USER RAN OUT OF CHOICES")
-            return win,guess,used_words,stmt
+            return win,guess,used_words
         except Exception as e:
             print(f"Error: {e}")
             
-    def main(self):
+    def main(self,n):
         try:
             games_played=0
             win = 0
@@ -90,13 +100,10 @@ class Game:
             used_words = []
             self.stats.file_statistics()
             self.stats.word_ranking()
-            good,bad,correct = [],[],''
-            while True:
-                all_words = helper.possible_words(self,good, bad, correct)
-                wordle = all_words[0]
-                word = self.d.word_picker(used_words)
+            while n:
+                n-=1
                 games_played += 1
-                win,guess,used_words,stmt =self.wordle_checker(win,guess,used_words,wordle,word)
+                win,guess,used_words =self.wordle_checker(win,guess,used_words)
                 print(f"GAMES PLAYED : {str(games_played)}")
                 self.utils.write_logs(f"GAMES PLAYED : {str(games_played)}")
                 print(f"WIN PERCENTAGE : {str((win*100)/games_played)}%")
@@ -104,12 +111,12 @@ class Game:
                 for i in range(len(guess)):
                     print(f"{guess[i]} GAMES WON AT GUESS NUMBER {i+1}")
                     self.utils.write_logs(f"{guess[i]} GAMES WON AT GUESS NUMBER {i+1}")
-                good , bad , correct = helper.good_bad_correct_generate(wordle , word  ,stmt)
+                
         except Exception as e:
             print(f"There has been an error: {e}")
 
 if __name__ == "__main__":
     g= Game()
-    g.main()
+    g.main(1000)
 
 
