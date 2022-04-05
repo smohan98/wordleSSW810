@@ -3,6 +3,7 @@ import HW03_Shreya_Mohan_dictionary as dictionary
 # from HW06_Shreya_Mohan_utility import write_logs
 # from HW07_Shreya_Mohan_statistics import file_statistics,word_ranking
 import HW06_Shreya_Mohan_utility as util
+import HW09_Shreya_Mohan_helper as helper
 import HW07_Shreya_Mohan_statistics as stat
 
 class Game:
@@ -34,7 +35,7 @@ class Game:
         except Exception as e:
             print(f"Error: {e}")
 
-    def wordle_checker(self,win,guess,used_words):
+    def wordle_checker(self,win,guess,used_words,wordle,word):
         try:
             print('''WORDLE rules:
             > Enter a 5 letter word
@@ -47,22 +48,23 @@ class Game:
             prev=[]
             attempts=6
 
-            word = self.d.word_picker(used_words)
             self.utils.write_logs(f"RANDOM WORD CHOSEN FOR THE GAME: {word}")
             used_words.append(word)
-            all_words = self.d.file_reader()
+            # all_words = self.d.file_reader()
 
 
             #While loop that works till 6 attempts are made
             while attempts:
-                check,wordle = self.u.user(attempts,prev,all_words)
+                # check,wordle = self.u.user(attempts,prev,all_words)
+
+                check = True
 
                 if check and word.strip() == wordle.strip():
                     win+=1
                     guess[6-attempts] += 1
                     self.utils.write_logs(f"USER ENTERED THE CORRECT WORD: {wordle.upper()}")
                     print("Correct Word")
-                    return win,guess,used_words
+                    return win,guess,used_words , wordle
                 elif check and word != wordle:
                     #reduces the count after every valid attempt
                     attempts-=1             
@@ -76,7 +78,7 @@ class Game:
             
             print("Oops, you are out of chances. Better luck next time!")
             self.utils.write_logs(f"USER RAN OUT OF CHOICES")
-            return win,guess,used_words
+            return win,guess,used_words,stmt
         except Exception as e:
             print(f"Error: {e}")
             
@@ -88,9 +90,13 @@ class Game:
             used_words = []
             self.stats.file_statistics()
             self.stats.word_ranking()
+            good,bad,correct = [],[],''
             while True:
+                all_words = helper.possible_words(self,good, bad, correct)
+                wordle = all_words[0]
+                word = self.d.word_picker(used_words)
                 games_played += 1
-                win,guess,used_words=self.wordle_checker(win,guess,used_words)
+                win,guess,used_words,stmt =self.wordle_checker(win,guess,used_words,wordle,word)
                 print(f"GAMES PLAYED : {str(games_played)}")
                 self.utils.write_logs(f"GAMES PLAYED : {str(games_played)}")
                 print(f"WIN PERCENTAGE : {str((win*100)/games_played)}%")
@@ -98,6 +104,7 @@ class Game:
                 for i in range(len(guess)):
                     print(f"{guess[i]} GAMES WON AT GUESS NUMBER {i+1}")
                     self.utils.write_logs(f"{guess[i]} GAMES WON AT GUESS NUMBER {i+1}")
+                good , bad , correct = helper.good_bad_correct_generate(wordle , word  ,stmt)
         except Exception as e:
             print(f"There has been an error: {e}")
 

@@ -24,11 +24,33 @@ class Helper:
                 list_of_rows = list(r)
                 self.words.append(list_of_rows)
                 self.words = [word[1] for word in list_of_rows]
+                return self.words
         except Exception as e:
             # self.write_logs(f"ERROR : File Error {e}",True)
             print(e)
+            return []
 
-    def possible_words(self)->list:
+    def good_bad_correct_generate(self,wordle,word,stmt):
+        good = []
+        bad = []
+        correct = ''
+        wordle_set = set(wordle)
+        word_set = set(word)
+        good = list(word_set & wordle_set)
+        bad = list(word_set - wordle_set)
+
+        for i in range(len(stmt)):
+            if  stmt[i] == '`' or stmt[i] == '"' or (i+1<len(stmt) and (stmt[i+1] == '`' or stmt[i+1] == '"')):
+                correct += ' '
+            else:
+                correct += stmt[i] 
+
+        print(good)
+        print(bad)
+        print(correct)
+        return good , bad , correct
+
+    def possible_words(self,good, bad, correct)->list:
         good = input("Enter good letters:")
         if len(good) > 5:
             while len(good)>5:
@@ -76,9 +98,8 @@ class Helper:
                 output = output.next_value
                 total+=1
             print(total-1)
+            return output.data
             
 
 f = Helper()
 f.file_wordRank()
-# print(f.possible_words( good=['a','i'], bad=['l','t'], correct=[('f',0),('y',4)]))
-f.possible_words()
